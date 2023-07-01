@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { NavLink } from "react-router-dom";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { recipeConstants } from "../constants/recipe-constants";
@@ -34,11 +35,15 @@ export const RecipeCard = ({ recipe }) => {
         </div>
         <div className="flex justify-between">
           <div className="font-bold">Ingredients:</div>
-          <div className="hover:cursor-pointer">See Recipe</div>
+          <NavLink to={`/detail/${id}`}>
+            <div className="hover:cursor-pointer">See Recipe</div>
+          </NavLink>
         </div>
         <div className="flex justify-between">
           <div className="font-bold">Instructions:</div>
-          <div className="hover:cursor-pointer">See Recipe</div>
+          <NavLink to={`/detail/${id}`}>
+            <div className="hover:cursor-pointer">See Recipe</div>
+          </NavLink>
         </div>
       </div>
     </div>
