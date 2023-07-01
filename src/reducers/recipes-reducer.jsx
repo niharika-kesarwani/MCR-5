@@ -8,6 +8,8 @@ const {
   SET_RADIO_FILTER,
   DELETE_RECIPE,
   SELECTED_RECIPE,
+  EDIT_RECIPE,
+  UPDATE_RECIPE,
 } = recipeConstants;
 
 export const recipeReducer = (state, { type, payload }) => {
@@ -30,6 +32,15 @@ export const recipeReducer = (state, { type, payload }) => {
         ...state,
         selectedRecipe: state.recipes?.find(({ id }) => id === payload),
       };
+    case EDIT_RECIPE:
+      return { ...state, toEditRecipe: payload };
+    case UPDATE_RECIPE:
+      return {
+        ...state,
+        recipes: state.recipes.map((recipe) =>
+          recipe.id === state.toEditRecipe.id ? payload : recipe
+        ),
+      };
     default:
       return state;
   }
@@ -41,4 +52,5 @@ export const initialRecipe = {
   radioFilter: "name",
   searchFilter: "",
   selectedRecipe: {},
+  toEditRecipe: null,
 };

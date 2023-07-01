@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from "react";
 import { useRecipe } from "../main";
 import { recipeConstants } from "../constants/recipe-constants";
 import { v4 as uuid } from "uuid";
@@ -6,19 +7,37 @@ import { toast } from "react-hot-toast";
 
 export const AddRecipeModal = () => {
   const [formDetails, setFormDetails] = useState({});
-  const { setRecipes } = useRecipe();
-  const { SET_SHOW_ADD_RECIPE_MODAL, ADD_RECIPE } = recipeConstants;
+  const {
+    recipes: { toEditRecipe },
+    setRecipes,
+  } = useRecipe();
+  const { SET_SHOW_ADD_RECIPE_MODAL, ADD_RECIPE, EDIT_RECIPE, UPDATE_RECIPE } =
+    recipeConstants;
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
     toast.success("Recipe added successfully!");
-    setRecipes({ type: ADD_RECIPE, payload: { ...formDetails, id: uuid() } });
+    if (toEditRecipe) {
+      setRecipes({
+        type: UPDATE_RECIPE,
+        payload: { ...toEditRecipe, ...formDetails },
+      });
+    } else {
+      setRecipes({ type: ADD_RECIPE, payload: { ...formDetails, id: uuid() } });
+    }
     setRecipes({ type: SET_SHOW_ADD_RECIPE_MODAL, payload: false });
+    setRecipes({ type: EDIT_RECIPE, payload: null });
   };
 
   const updateFormDetails = (e) => {
     setFormDetails({ ...formDetails, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    if (toEditRecipe) {
+      setFormDetails(toEditRecipe);
+    }
+  }, []);
 
   return (
     <div
@@ -33,6 +52,7 @@ export const AddRecipeModal = () => {
             type="text"
             className="border px-2 py-1"
             name="name"
+            defaultValue={formDetails.name}
             onChange={(e) => updateFormDetails(e)}
           />
         </div>
@@ -42,6 +62,7 @@ export const AddRecipeModal = () => {
             type="text"
             className="border px-2 py-1"
             name="imgUrl"
+            defaultValue={formDetails.imgUrl}
             onChange={(e) => updateFormDetails(e)}
           />
         </div>
@@ -51,6 +72,7 @@ export const AddRecipeModal = () => {
             type="text"
             className="border px-2 py-1"
             name="cuisine"
+            defaultValue={formDetails.cuisine}
             onChange={(e) => updateFormDetails(e)}
           />
         </div>
@@ -60,6 +82,7 @@ export const AddRecipeModal = () => {
             type="text"
             className="border px-2 py-1"
             name="ingredients"
+            defaultValue={formDetails.ingredients}
             onChange={(e) => updateFormDetails(e)}
           />
         </div>
@@ -69,6 +92,7 @@ export const AddRecipeModal = () => {
             type="text"
             className="border px-2 py-1"
             name="instructions"
+            defaultValue={formDetails.instructions}
             onChange={(e) => updateFormDetails(e)}
           />
         </div>

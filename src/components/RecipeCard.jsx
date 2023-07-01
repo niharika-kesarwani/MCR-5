@@ -9,14 +9,22 @@ import { toast } from "react-hot-toast";
 export const RecipeCard = ({ recipe }) => {
   const { setRecipes } = useRecipe();
   const { id, name, cuisine, ingredients, instructions, imgUrl } = recipe;
-  const { DELETE_RECIPE } = recipeConstants;
+  const { DELETE_RECIPE, SET_SHOW_ADD_RECIPE_MODAL, EDIT_RECIPE } =
+    recipeConstants;
 
   return (
     <div className="flex w-60 flex-col justify-between rounded-lg border p-3">
       <div className="relative w-full md:h-[70%]">
         <img className="h-full w-full object-cover" src={imgUrl} />
         <div className="absolute right-0 top-0 flex gap-2 bg-white p-1 hover:cursor-pointer">
-          <EditSharpIcon />
+          <div
+            onClick={() => {
+              setRecipes({ type: EDIT_RECIPE, payload: recipe });
+              setRecipes({ type: SET_SHOW_ADD_RECIPE_MODAL, payload: true });
+            }}
+          >
+            <EditSharpIcon />
+          </div>
           <div
             onClick={() => {
               toast.success("Deleted recipe successfully!");
