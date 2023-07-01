@@ -8,8 +8,24 @@ export const RecipeContext = createContext();
 export const RecipeProvider = ({ children }) => {
   const [recipes, setRecipes] = useReducer(recipeReducer, initialRecipe);
 
+  const radioSortedRecipes = recipes.recipes.filter(
+    ({ name, ingredients, cuisine }) => {
+      if (recipes.radioFilter === "name") {
+        return name.toLowerCase().includes(recipes.searchFilter.toLowerCase());
+      } else if (recipes.radioFilter === "ingredients") {
+        return ingredients
+          .toLowerCase()
+          .includes(recipes.searchFilter.toLowerCase());
+      } else {
+        return cuisine
+          .toLowerCase()
+          .includes(recipes.searchFilter.toLowerCase());
+      }
+    }
+  );
+
   return (
-    <RecipeContext.Provider value={{ recipes, setRecipes }}>
+    <RecipeContext.Provider value={{ recipes, setRecipes, radioSortedRecipes }}>
       {children}
     </RecipeContext.Provider>
   );

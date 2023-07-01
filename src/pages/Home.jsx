@@ -7,8 +7,9 @@ import { recipeConstants } from "../constants/recipe-constants";
 
 export const Home = () => {
   const {
-    recipes: { recipes, showAddRecipeModal },
+    recipes: { showAddRecipeModal },
     setRecipes,
+    radioSortedRecipes,
   } = useRecipe();
   const { SET_SHOW_ADD_RECIPE_MODAL } = recipeConstants;
 
@@ -17,7 +18,7 @@ export const Home = () => {
       <Filters />
       <div className="text-3xl font-bold">All Recipies:</div>
       <ul className="flex flex-wrap gap-10">
-        {recipes?.map((recipe) => (
+        {radioSortedRecipes?.map((recipe) => (
           <RecipeCard recipe={recipe} key={recipe?.id} />
         ))}
         <div
