@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRecipe } from "../main";
 import { recipeConstants } from "../constants/recipe-constants";
 import { v4 as uuid } from "uuid";
+import { toast } from "react-hot-toast";
 
 export const AddRecipeModal = () => {
   const [formDetails, setFormDetails] = useState({});
@@ -10,6 +11,7 @@ export const AddRecipeModal = () => {
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
+    toast.success("Recipe added successfully!");
     setRecipes({ type: ADD_RECIPE, payload: { ...formDetails, id: uuid() } });
     setRecipes({ type: SET_SHOW_ADD_RECIPE_MODAL, payload: false });
   };

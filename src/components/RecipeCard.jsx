@@ -1,9 +1,14 @@
 /* eslint-disable react/prop-types */
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { recipeConstants } from "../constants/recipe-constants";
+import { useRecipe } from "../main";
+import { toast } from "react-hot-toast";
 
 export const RecipeCard = ({ recipe }) => {
+  const { setRecipes } = useRecipe();
   const { id, name, cuisine, ingredients, instructions, imgUrl } = recipe;
+  const { DELETE_RECIPE } = recipeConstants;
 
   return (
     <div className="flex w-60 flex-col justify-between rounded-lg border p-3">
@@ -11,7 +16,14 @@ export const RecipeCard = ({ recipe }) => {
         <img className="h-full w-full object-cover" src={imgUrl} />
         <div className="absolute right-0 top-0 flex gap-2 bg-white p-1 hover:cursor-pointer">
           <EditSharpIcon />
-          <DeleteIcon />
+          <div
+            onClick={() => {
+              toast.success("Deleted recipe successfully!");
+              setRecipes({ type: DELETE_RECIPE, payload: id });
+            }}
+          >
+            <DeleteIcon />
+          </div>
         </div>
       </div>
       <div className="text-xl font-bold">{name}</div>
