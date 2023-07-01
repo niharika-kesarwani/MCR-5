@@ -16,13 +16,14 @@ export const AddRecipeModal = () => {
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
-    toast.success("Recipe added successfully!");
     if (toEditRecipe) {
+      toast.success("Recipe updated successfully!");
       setRecipes({
         type: UPDATE_RECIPE,
         payload: { ...toEditRecipe, ...formDetails },
       });
     } else {
+      toast.success("Recipe added successfully!");
       setRecipes({ type: ADD_RECIPE, payload: { ...formDetails, id: uuid() } });
     }
     setRecipes({ type: SET_SHOW_ADD_RECIPE_MODAL, payload: false });
@@ -44,7 +45,9 @@ export const AddRecipeModal = () => {
       className="flex flex-col gap-5 rounded-2xl bg-white p-4"
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="font-bold uppercase">Add Recipe</div>
+      <div className="font-bold uppercase">
+        {toEditRecipe ? "Update" : "Add"} Recipe
+      </div>
       <form className="flex flex-col gap-4" onSubmit={formSubmitHandler}>
         <div className="flex items-center justify-between gap-3">
           <label>Name:</label>
@@ -100,7 +103,7 @@ export const AddRecipeModal = () => {
           className="rounded-full bg-red-400 p-1 text-lg font-bold uppercase hover:cursor-pointer"
           type="submit"
         >
-          Add
+          {toEditRecipe ? "Update" : "Add"}
         </button>
       </form>
     </div>
