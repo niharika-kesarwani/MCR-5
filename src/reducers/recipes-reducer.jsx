@@ -1,7 +1,8 @@
-import { recipes } from "../data/recipes";
+/* eslint-disable no-case-declarations */
 import { recipeConstants } from "../constants/recipe-constants";
 
 const {
+  SET_RECIPES,
   SET_SHOW_ADD_RECIPE_MODAL,
   ADD_RECIPE,
   SET_SEARCH_FILTER,
@@ -14,19 +15,27 @@ const {
 
 export const recipeReducer = (state, { type, payload }) => {
   switch (type) {
+    case SET_RECIPES:
+      return { ...state, recipes: payload };
     case SET_SHOW_ADD_RECIPE_MODAL:
       return { ...state, showAddRecipeModal: payload };
-    case ADD_RECIPE:
-      return { ...state, recipes: [...state.recipes, payload] };
+    case ADD_RECIPE: {
+      const updatedRecipes = [...state.recipes, payload];
+      localStorage.setItem("recipes", JSON.stringify(updatedRecipes));
+      return { ...state, recipes: updatedRecipes };
+    }
     case SET_SEARCH_FILTER:
       return { ...state, searchFilter: payload };
     case SET_RADIO_FILTER:
       return { ...state, radioFilter: payload };
-    case DELETE_RECIPE:
+    case DELETE_RECIPE: {
+      const updatedRecipes = state.recipes.filter(({ id }) => id !== payload);
+      localStorage.setItem("recipes", JSON.stringify(updatedRecipes));
       return {
         ...state,
-        recipes: state.recipes.filter(({ id }) => id !== payload),
+        recipes: updatedRecipes,
       };
+    }
     case SELECTED_RECIPE:
       return {
         ...state,
@@ -34,20 +43,23 @@ export const recipeReducer = (state, { type, payload }) => {
       };
     case EDIT_RECIPE:
       return { ...state, toEditRecipe: payload };
-    case UPDATE_RECIPE:
+    case UPDATE_RECIPE: {
+      const updatedRecipes = state.recipes.map((recipe) =>
+        recipe.id === state.toEditRecipe.id ? payload : recipe
+      );
+      localStorage.setItem("recipes", JSON.stringify(updatedRecipes));
       return {
         ...state,
-        recipes: state.recipes.map((recipe) =>
-          recipe.id === state.toEditRecipe.id ? payload : recipe
-        ),
+        recipes: updatedRecipes,
       };
+    }
     default:
       return state;
   }
 };
 
 export const initialRecipe = {
-  recipes: recipes,
+  recipes: [],
   showAddRecipeModal: false,
   radioFilter: "name",
   searchFilter: "",
